@@ -9,3 +9,9 @@ xgboost
 tensorflow
 torch
 scipy
+fastapi
+uvicorn
+sqlalchemy
+pymysql
+python-multipart
+pydantic[email]
