@@ -14,6 +14,7 @@ uvicorn==0.30.1
 # Database and ORM
 sqlalchemy==2.0.35
 pymysql==1.1.1
+cryptography
 
 # Pydantic (with email validator)
 pydantic[email]==2.9.2
