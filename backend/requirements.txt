@@ -1,18 +1,36 @@
-pandas
-numpy
-scikit-learn
-matplotlib
-seaborn
-jupyter
-notebook
-xgboost
+# Core Data Processing
+pandas==2.2.2
+numpy==1.26.4
+scikit-learn==1.7.1
+scipy==1.13.1
+
+# Machine Learning
+xgboost==2.1.1
 tensorflow
 torch
-scipy
-fastapi
-uvicorn
-sqlalchemy
-pymysql
-python-multipart
-pydantic[email]
+
+# Backend API
+fastapi==0.115.0
+uvicorn==0.30.1
+
+# Database and ORM
+sqlalchemy==2.0.35
+pymysql==1.1.1
 cryptography
+
+# Pydantic (with email validation)
+pydantic[email]==2.9.2
+
+# File Handling & Utilities
+python-multipart==0.0.9
+joblib==1.4.2
+
+# Visualization (Optional)
+matplotlib==3.9.2
+seaborn==0.13.2
+
+# Dev Tools
+jupyter
+notebook
+
+bcrypt==4.2.0
