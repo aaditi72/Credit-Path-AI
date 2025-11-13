@@ -1,0 +1,545 @@
+2025-11-09 14:02:41,791 - {'timestamp': '2025-11-09T14:02:41.791826', 'request': {'loan_amnt': 12000.0, 'int_rate': 13.5, 'installment': 400.0, 'annual_inc': 55000.0, 'dti': 18.3, 'open_acc': 7, 'pub_rec': 0, 'revol_bal': 15000.0, 'revol_util': 42.5, 'total_acc': 25, 'mort_acc': 2, 'pub_rec_bankruptcies': 0, 'loan_to_income_ratio': 0.21, 'credit_utilization_ratio': 0.43}, 'response': {'default_probability': 0.49109482765197754, 'recommendation': 'MANUAL REVIEW'}}
+2025-11-09 14:09:09,992 - INFO - {
+  "timestamp": "2025-11-09T14:09:09.992402",
+  "request_data": {
+    "loan_amnt": 12000.0,
+    "int_rate": 13.5,
+    "installment": 400.0,
+    "sub_grade": 5.0,
+    "annual_inc": 55000.0,
+    "dti": 18.3,
+    "open_acc": 7,
+    "revol_util": 42.5,
+    "total_acc": 25,
+    "mort_acc": 2,
+    "loan_to_income_ratio": 0.21,
+    "credit_utilization_ratio": 0.43,
+    "pub_rec": 0,
+    "revol_bal": 15000.0,
+    "pub_rec_bankruptcies": 0
+  },
+  "response_data": {
+    "timestamp": "2025-11-09T14:09:09.992394",
+    "default_probability": 0.5216,
+    "recommendation": {
+      "timestamp": "2025-11-09T14:09:09.992382",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.5216,
+      "reasoning": [
+        "Predicted default probability: 52.16%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-09 14:11:37,019 - INFO - {
+  "timestamp": "2025-11-09T14:11:37.019051",
+  "request_data": {
+    "loan_amnt": 12000.0,
+    "int_rate": 13.5,
+    "installment": 400.0,
+    "sub_grade": 5.0,
+    "annual_inc": 55000.0,
+    "dti": 18.3,
+    "open_acc": 7,
+    "revol_util": 42.5,
+    "total_acc": 25,
+    "mort_acc": 2,
+    "loan_to_income_ratio": 0.21,
+    "credit_utilization_ratio": 0.43,
+    "pub_rec": 0,
+    "revol_bal": 15000.0,
+    "pub_rec_bankruptcies": 0
+  },
+  "response_data": {
+    "timestamp": "2025-11-09T14:11:37.019041",
+    "default_probability": 0.5216,
+    "recommendation": {
+      "timestamp": "2025-11-09T14:11:37.019016",
+      "decision": "APPROVE",
+      "risk_category": "LOW RISK",
+      "risk_grade": "B",
+      "probability": 0.5216,
+      "hybrid_probability": 0.3651,
+      "reasoning": [
+        "Predicted model default probability: 52.16%.",
+        "Adjusted (hybrid) risk score: 36.51%.",
+        "Dynamic thresholds applied \u2192 Approve < 0.4, Review < 0.7.",
+        "Assigned risk grade: B (LOW RISK)."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-09 14:20:10,210 - INFO - {
+  "timestamp": "2025-11-09T14:20:10.209919",
+  "request_data": {
+    "loan_amnt": 1200.0,
+    "int_rate": 13.0,
+    "installment": 400.0,
+    "sub_grade": 5.0,
+    "annual_inc": 5000.0,
+    "dti": 18.0,
+    "open_acc": 7,
+    "revol_util": 43.0,
+    "total_acc": 25,
+    "mort_acc": 2,
+    "loan_to_income_ratio": 0.43,
+    "credit_utilization_ratio": 0.52,
+    "pub_rec": 0,
+    "revol_bal": 15000.0,
+    "pub_rec_bankruptcies": 0
+  },
+  "response_data": {
+    "timestamp": "2025-11-09T14:20:10.209911",
+    "default_probability": 0.5239,
+    "recommendation": {
+      "timestamp": "2025-11-09T14:20:10.209897",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.5239,
+      "reasoning": [
+        "Predicted default probability: 52.39%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-09 14:21:56,691 - INFO - {
+  "timestamp": "2025-11-09T14:21:56.691678",
+  "request_data": {
+    "loan_amnt": 1200.0,
+    "int_rate": 13.0,
+    "installment": 400.0,
+    "sub_grade": 5.0,
+    "annual_inc": 5000.0,
+    "dti": 18.0,
+    "open_acc": 7,
+    "revol_util": 43.0,
+    "total_acc": 25,
+    "mort_acc": 2,
+    "loan_to_income_ratio": 0.43,
+    "credit_utilization_ratio": 0.52,
+    "pub_rec": 0,
+    "revol_bal": 15000.0,
+    "pub_rec_bankruptcies": 0
+  },
+  "response_data": {
+    "timestamp": "2025-11-09T14:21:56.691671",
+    "default_probability": 0.5239,
+    "recommendation": {
+      "timestamp": "2025-11-09T14:21:56.691658",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.5239,
+      "reasoning": [
+        "Predicted default probability: 52.39%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-09 14:21:58,818 - INFO - {
+  "timestamp": "2025-11-09T14:21:58.817914",
+  "request_data": {
+    "loan_amnt": 1200.0,
+    "int_rate": 13.0,
+    "installment": 400.0,
+    "sub_grade": 5.0,
+    "annual_inc": 5000.0,
+    "dti": 18.0,
+    "open_acc": 7,
+    "revol_util": 43.0,
+    "total_acc": 25,
+    "mort_acc": 2,
+    "loan_to_income_ratio": 0.43,
+    "credit_utilization_ratio": 0.52,
+    "pub_rec": 0,
+    "revol_bal": 15000.0,
+    "pub_rec_bankruptcies": 0
+  },
+  "response_data": {
+    "timestamp": "2025-11-09T14:21:58.817907",
+    "default_probability": 0.5239,
+    "recommendation": {
+      "timestamp": "2025-11-09T14:21:58.817896",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.5239,
+      "reasoning": [
+        "Predicted default probability: 52.39%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-11 22:07:41,248 - INFO - {
+  "timestamp": "2025-11-11T22:07:41.248236",
+  "request_data": {
+    "loan_amnt": 12000.0,
+    "int_rate": 13.5,
+    "installment": 400.0,
+    "sub_grade": 5.0,
+    "annual_inc": 55000.0,
+    "dti": 18.3,
+    "open_acc": 7,
+    "revol_util": 42.5,
+    "total_acc": 25,
+    "mort_acc": 2,
+    "loan_to_income_ratio": 0.21,
+    "credit_utilization_ratio": 0.43,
+    "pub_rec": 0,
+    "revol_bal": 0.0,
+    "pub_rec_bankruptcies": 0
+  },
+  "response_data": {
+    "timestamp": "2025-11-11T22:07:41.248229",
+    "default_probability": 0.5301,
+    "recommendation": {
+      "timestamp": "2025-11-11T22:07:41.248219",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.5301,
+      "reasoning": [
+        "Predicted default probability: 53.01%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-11 22:09:41,941 - INFO - {
+  "timestamp": "2025-11-11T22:09:41.941832",
+  "request_data": {
+    "loan_amnt": 12000.0,
+    "int_rate": 13.5,
+    "installment": 400.0,
+    "annual_inc": 55000.0,
+    "dti": 18.3,
+    "open_acc": 7,
+    "revol_util": 42.5,
+    "total_acc": 25,
+    "mort_acc": 2,
+    "credit_score": 710,
+    "emp_length": 5,
+    "loan_intent": "PERSONAL",
+    "home_ownership": "OWN",
+    "person_age": 32,
+    "sub_grade": 5
+  },
+  "response_data": {
+    "timestamp": "2025-11-11T22:09:41.941827",
+    "default_probability": 0.5301,
+    "recommendation": {
+      "timestamp": "2025-11-11T22:09:41.941817",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.5301,
+      "reasoning": [
+        "Predicted default probability: 53.01%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-11 22:51:35,605 - INFO - {
+  "timestamp": "2025-11-11T22:51:35.604912",
+  "request_data": {
+    "loan_amnt": 12000.0,
+    "int_rate": 13.5,
+    "installment": 400.0,
+    "annual_inc": 55000.0,
+    "dti": 18.3,
+    "open_acc": 7,
+    "revol_util": 42.5,
+    "total_acc": 25,
+    "mort_acc": 2,
+    "credit_score": 710,
+    "emp_length": 5,
+    "loan_intent": "PERSONAL",
+    "home_ownership": "OWN",
+    "person_age": 32,
+    "sub_grade": 5
+  },
+  "response_data": {
+    "timestamp": "2025-11-11T22:51:35.604903",
+    "default_probability": 0.5301,
+    "recommendation": {
+      "timestamp": "2025-11-11T22:51:35.604890",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.5301,
+      "reasoning": [
+        "Predicted default probability: 53.01%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-12 19:14:42,439 - INFO - {
+  "timestamp": "2025-11-12T19:14:42.439195",
+  "request_data": {
+    "loan_amnt": 2000000.0,
+    "int_rate": 12.0,
+    "installment": 567.0,
+    "sub_grade": 4.0,
+    "annual_inc": 500000.0,
+    "dti": 46.0,
+    "open_acc": 7,
+    "revol_util": 45.0,
+    "total_acc": 25,
+    "mort_acc": 12,
+    "loan_to_income_ratio": 4.0,
+    "credit_utilization_ratio": 0.45,
+    "pub_rec": 45,
+    "revol_bal": 40000.0,
+    "pub_rec_bankruptcies": 77
+  },
+  "response_data": {
+    "timestamp": "2025-11-12T19:14:42.439182",
+    "default_probability": 0.4778,
+    "recommendation": {
+      "timestamp": "2025-11-12T19:14:42.439161",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.4778,
+      "reasoning": [
+        "Predicted default probability: 47.78%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-12 19:20:39,436 - INFO - {
+  "timestamp": "2025-11-12T19:20:39.436507",
+  "request_data": {
+    "loan_amnt": 200000.0,
+    "int_rate": 12.0,
+    "installment": 567.0,
+    "sub_grade": 4.0,
+    "annual_inc": 500000.0,
+    "dti": 46.0,
+    "open_acc": 7,
+    "revol_util": 45.0,
+    "total_acc": 25,
+    "mort_acc": 12,
+    "loan_to_income_ratio": 0.4,
+    "credit_utilization_ratio": 0.45,
+    "pub_rec": 45,
+    "revol_bal": 40000.0,
+    "pub_rec_bankruptcies": 77
+  },
+  "response_data": {
+    "timestamp": "2025-11-12T19:20:39.436500",
+    "default_probability": 0.4823,
+    "recommendation": {
+      "timestamp": "2025-11-12T19:20:39.436486",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.4823,
+      "reasoning": [
+        "Predicted default probability: 48.23%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-12 19:20:41,385 - INFO - {
+  "timestamp": "2025-11-12T19:20:41.385401",
+  "request_data": {
+    "loan_amnt": 200000.0,
+    "int_rate": 12.0,
+    "installment": 567.0,
+    "sub_grade": 4.0,
+    "annual_inc": 500000.0,
+    "dti": 46.0,
+    "open_acc": 7,
+    "revol_util": 45.0,
+    "total_acc": 25,
+    "mort_acc": 12,
+    "loan_to_income_ratio": 0.4,
+    "credit_utilization_ratio": 0.45,
+    "pub_rec": 45,
+    "revol_bal": 40000.0,
+    "pub_rec_bankruptcies": 77
+  },
+  "response_data": {
+    "timestamp": "2025-11-12T19:20:41.385395",
+    "default_probability": 0.4823,
+    "recommendation": {
+      "timestamp": "2025-11-12T19:20:41.385386",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.4823,
+      "reasoning": [
+        "Predicted default probability: 48.23%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-12 19:20:43,068 - INFO - {
+  "timestamp": "2025-11-12T19:20:43.068702",
+  "request_data": {
+    "loan_amnt": 200000.0,
+    "int_rate": 12.0,
+    "installment": 567.0,
+    "sub_grade": 4.0,
+    "annual_inc": 500000.0,
+    "dti": 46.0,
+    "open_acc": 7,
+    "revol_util": 45.0,
+    "total_acc": 25,
+    "mort_acc": 12,
+    "loan_to_income_ratio": 0.4,
+    "credit_utilization_ratio": 0.45,
+    "pub_rec": 45,
+    "revol_bal": 40000.0,
+    "pub_rec_bankruptcies": 77
+  },
+  "response_data": {
+    "timestamp": "2025-11-12T19:20:43.068697",
+    "default_probability": 0.4823,
+    "recommendation": {
+      "timestamp": "2025-11-12T19:20:43.068688",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.4823,
+      "reasoning": [
+        "Predicted default probability: 48.23%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-12 19:20:43,282 - INFO - {
+  "timestamp": "2025-11-12T19:20:43.282791",
+  "request_data": {
+    "loan_amnt": 200000.0,
+    "int_rate": 12.0,
+    "installment": 567.0,
+    "sub_grade": 4.0,
+    "annual_inc": 500000.0,
+    "dti": 46.0,
+    "open_acc": 7,
+    "revol_util": 45.0,
+    "total_acc": 25,
+    "mort_acc": 12,
+    "loan_to_income_ratio": 0.4,
+    "credit_utilization_ratio": 0.45,
+    "pub_rec": 45,
+    "revol_bal": 40000.0,
+    "pub_rec_bankruptcies": 77
+  },
+  "response_data": {
+    "timestamp": "2025-11-12T19:20:43.282786",
+    "default_probability": 0.4823,
+    "recommendation": {
+      "timestamp": "2025-11-12T19:20:43.282777",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.4823,
+      "reasoning": [
+        "Predicted default probability: 48.23%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-12 19:20:46,139 - INFO - {
+  "timestamp": "2025-11-12T19:20:46.138934",
+  "request_data": {
+    "loan_amnt": 200000.0,
+    "int_rate": 12.0,
+    "installment": 567.0,
+    "sub_grade": 4.0,
+    "annual_inc": 500000.0,
+    "dti": 46.0,
+    "open_acc": 7,
+    "revol_util": 45.0,
+    "total_acc": 25,
+    "mort_acc": 12,
+    "loan_to_income_ratio": 0.4,
+    "credit_utilization_ratio": 0.45,
+    "pub_rec": 45,
+    "revol_bal": 40000.0,
+    "pub_rec_bankruptcies": 77
+  },
+  "response_data": {
+    "timestamp": "2025-11-12T19:20:46.138923",
+    "default_probability": 0.4823,
+    "recommendation": {
+      "timestamp": "2025-11-12T19:20:46.138905",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.4823,
+      "reasoning": [
+        "Predicted default probability: 48.23%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}
+2025-11-12 19:20:46,353 - INFO - {
+  "timestamp": "2025-11-12T19:20:46.353289",
+  "request_data": {
+    "loan_amnt": 200000.0,
+    "int_rate": 12.0,
+    "installment": 567.0,
+    "sub_grade": 4.0,
+    "annual_inc": 500000.0,
+    "dti": 46.0,
+    "open_acc": 7,
+    "revol_util": 45.0,
+    "total_acc": 25,
+    "mort_acc": 12,
+    "loan_to_income_ratio": 0.4,
+    "credit_utilization_ratio": 0.45,
+    "pub_rec": 45,
+    "revol_bal": 40000.0,
+    "pub_rec_bankruptcies": 77
+  },
+  "response_data": {
+    "timestamp": "2025-11-12T19:20:46.353282",
+    "default_probability": 0.4823,
+    "recommendation": {
+      "timestamp": "2025-11-12T19:20:46.353270",
+      "decision": "MANUAL REVIEW",
+      "risk_category": "MODERATE RISK",
+      "probability": 0.4823,
+      "reasoning": [
+        "Predicted default probability: 48.23%.",
+        "No major financial red flags detected based on current data."
+      ]
+    },
+    "model_version": "xgb_hypertuned_all_features_v1",
+    "status": "success"
+  }
+}

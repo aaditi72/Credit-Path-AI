@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Single Prediction | CreditPath AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+    .input-box {
+      width: 100%; padding: 10px 14px;
+      border: 1px solid #d1d5db; border-radius: 8px;
+      transition: border 0.2s, box-shadow 0.2s;
+      font-size: 0.95rem;
+    }
+    .input-box:focus {
+      border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.2);
+      outline: none;
+    }
+    .form-section-title {
+      font-size: 1.25rem; /* text-xl */
+      font-weight: 600; /* font-semibold */
+      color: #374151; /* text-gray-700 */
+      margin-bottom: 1rem; /* mb-4 */
+      border-bottom: 2px solid #eff6ff; /* border-blue-50 */
+      padding-bottom: 0.5rem;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 to-indigo-100 text-slate-800">
+  <!-- Navbar -->
+  <nav class="bg-blue-700 text-white py-3 px-8 flex justify-between items-center shadow-md">
+    <h1 class="font-bold text-xl flex items-center gap-2">💳 CreditPath AI</h1>
+    <div class="space-x-6">
+      <a href="dashboard.html" class="hover:text-gray-200 transition-colors">Dashboard</a>
+      <a href="single_prediction.html" class="font-semibold border-b-2 border-white pb-1">Single Prediction</a>
+      <a href="batch_prediction.html" class="hover:text-gray-200 transition-colors">Batch Processing</a>
+    </div>
+  </nav>
+
+  <!-- Content -->
+  <main class="flex-grow flex justify-center items-start py-10 px-4">
+    <div class="bg-white w-full max-w-5xl rounded-2xl shadow-xl p-10 border border-gray-100">
+      <h2 class="text-3xl font-bold text-blue-700 mb-4 text-center">Single Borrower Risk Assessment</h2>
+      <p class="text-gray-600 text-center mb-10 text-lg">Input borrower details to get an instant, AI-powered default risk prediction and actionable recommendations.</p>
+
+      <form id="predictionForm" class="space-y-8">
+        <!-- Loan Details -->
+        <section class="bg-blue-50 p-6 rounded-lg shadow-inner">
+          <h3 class="form-section-title">💰 Loan Details</h3>
+          <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            <div>
+              <label for="loan_amnt" class="text-sm font-medium text-gray-700">Loan Amount (₹)</label>
+              <input id="loan_amnt" name="loan_amnt" type="number" class="input-box" placeholder="e.g., 15000" required>
+            </div>
+            <div>
+              <label for="int_rate" class="text-sm font-medium text-gray-700">Interest Rate (%)</label>
+              <input id="int_rate" name="int_rate" type="number" step="0.01" min="0" max="30" class="input-box" placeholder="e.g., 12.5" required>
+            </div>
+            <div>
+              <label for="installment" class="text-sm font-medium text-gray-700">Monthly Installment (₹)</label>
+              <input id="installment" name="installment" type="number" class="input-box" placeholder="e.g., 450" required>
+            </div>
+            <div>
+              <label for="sub_grade" class="text-sm font-medium text-gray-700">Sub-grade (1–10)</label>
+              <input id="sub_grade" name="sub_grade" type="number" min="1" max="10" class="input-box" placeholder="e.g., 5" required>
+            </div>
+          </div>
+        </section>
+
+        <!-- Borrower Info -->
+        <section class="bg-green-50 p-6 rounded-lg shadow-inner">
+          <h3 class="form-section-title">👤 Borrower Information</h3>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label for="annual_inc" class="text-sm font-medium text-gray-700">Annual Income (₹)</label>
+              <input id="annual_inc" name="annual_inc" type="number" class="input-box" placeholder="e.g., 60000" required>
+            </div>
+            <div>
+              <label for="dti" class="text-sm font-medium text-gray-700">Debt-to-Income Ratio (%)</label>
+              <input id="dti" name="dti" type="number" step="0.1" min="0" max="60" class="input-box" placeholder="e.g., 20.5" required>
+            </div>
+          </div>
+        </section>
+
+        <!-- Credit Info -->
+        <section class="bg-purple-50 p-6 rounded-lg shadow-inner">
+          <h3 class="form-section-title">💳 Credit Information</h3>
+          <div class="grid md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <div><label for="open_acc" class="text-sm font-medium text-gray-700">Open Accounts</label><input id="open_acc" name="open_acc" type="number" min="0" class="input-box" placeholder="e.g., 8" required></div>
+            <div><label for="total_acc" class="text-sm font-medium text-gray-700">Total Accounts</label><input id="total_acc" name="total_acc" type="number" min="0" class="input-box" placeholder="e.g., 15" required></div>
+            <div><label for="mort_acc" class="text-sm font-medium text-gray-700">Mortgage Accounts</label><input id="mort_acc" name="mort_acc" type="number" min="0" class="input-box" placeholder="e.g., 2" required></div>
+            <div><label for="revol_util" class="text-sm font-medium text-gray-700">Revolving Utilization (%)</label><input id="revol_util" name="revol_util" type="number" step="0.1" min="0" max="100" class="input-box" placeholder="e.g., 45.2" required></div>
+            <div><label for="revol_bal" class="text-sm font-medium text-gray-700">Revolving Balance (₹)</label><input id="revol_bal" name="revol_bal" type="number" min="0" class="input-box" placeholder="e.g., 12000" required></div>
+            <div><label for="pub_rec" class="text-sm font-medium text-gray-700">Public Records</label><input id="pub_rec" name="pub_rec" type="number" min="0" class="input-box" value="0" required></div>
+            <div><label for="pub_rec_bankruptcies" class="text-sm font-medium text-gray-700">Bankruptcies</label><input id="pub_rec_bankruptcies" name="pub_rec_bankruptcies" type="number" min="0" class="input-box" value="0" required></div>
+          </div>
+        </section>
+
+        <!-- Auto Fields -->
+        <section class="bg-gray-100 p-6 rounded-lg shadow-inner">
+          <h3 class="form-section-title">⚙️ Auto-calculated Ratios</h3>
+          <div class="grid md:grid-cols-2 gap-6">
+            <div>
+              <label for="loan_to_income_ratio" class="text-sm font-medium text-gray-700">Loan-to-Income Ratio</label>
+              <input id="loan_to_income_ratio" name="loan_to_income_ratio" type="number" readonly class="input-box bg-gray-200 text-gray-600 cursor-not-allowed">
+            </div>
+            <div>
+              <label for="credit_utilization_ratio" class="text-sm font-medium text-gray-700">Credit Utilization Ratio</label>
+              <input id="credit_utilization_ratio" name="credit_utilization_ratio" type="number" readonly class="input-box bg-gray-200 text-gray-600 cursor-not-allowed">
+            </div>
+          </div>
+        </section>
+
+        <div class="flex justify-center gap-6 mt-10">
+          <button type="submit" id="predictBtn" class="bg-blue-700 hover:bg-blue-800 text-white px-8 py-3 rounded-lg font-semibold shadow-md transition-colors flex items-center justify-center min-w-[150px]">
+            Predict Risk
+          </button>
+          <button type="reset" class="border border-blue-700 text-blue-700 px-8 py-3 rounded-lg hover:bg-blue-50 font-semibold transition-colors min-w-[150px]">
+            Reset Form
+          </button>
+        </div>
+      </form>
+
+      <!-- Result -->
+      <div id="resultSection" class="hidden mt-12 p-6 rounded-xl border-2 shadow-lg bg-gray-50 animate-fadeIn">
+        <!-- Content will be injected here -->
+      </div>
+    </div>
+  </main>
+
+  <!-- JS -->
+  <script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const form = document.getElementById("predictionForm");
+    const loanAmount = document.getElementById("loan_amnt");
+    const annualIncome = document.getElementById("annual_inc");
+    const loanToIncome = document.getElementById("loan_to_income_ratio");
+    const revolUtil = document.getElementById("revol_util");
+    const creditUtil = document.getElementById("credit_utilization_ratio");
+    const resultSection = document.getElementById("resultSection");
+    const predictBtn = document.getElementById("predictBtn");
+
+    const updateRatios = () => {
+      const loan = parseFloat(loanAmount.value);
+      const income = parseFloat(annualIncome.value);
+      const util = parseFloat(revolUtil.value);
+
+      loanToIncome.value = (loan && income && income > 0) ? (loan / income).toFixed(3) : '';
+      creditUtil.value = (util || util === 0) ? (util / 100).toFixed(3) : '';
+    };
+
+    [loanAmount, annualIncome, revolUtil].forEach(el => el.addEventListener("input", updateRatios));
+    form.addEventListener('reset', () => {
+        setTimeout(() => { // Small delay to allow reset to clear values
+            loanToIncome.value = '';
+            creditUtil.value = '';
+            resultSection.classList.add("hidden");
+        }, 50);
+    });
+
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      
+      // Basic client-side validation for required fields
+      if (!form.checkValidity()) {
+          alert('Please fill in all required fields correctly.');
+          form.reportValidity(); // Shows browser default validation messages
+          return;
+      }
+
+      predictBtn.disabled = true;
+      predictBtn.innerHTML = `
+        <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Predicting...
+      `;
+      resultSection.classList.add("hidden");
+
+      const rawData = Object.fromEntries(new FormData(form).entries());
+      const dataToSend = {};
+
+      for (let k in rawData) {
+        const num = parseFloat(rawData[k]);
+        if (!isNaN(num)) dataToSend[k] = num;
+        else dataToSend[k] = rawData[k]; // Keep non-numeric values as is
+      }
+
+      // Ensure ratios are calculated even if input event didn't fire
+      if (dataToSend.loan_amnt && dataToSend.annual_inc && dataToSend.annual_inc > 0) {
+          dataToSend.loan_to_income_ratio = parseFloat((dataToSend.loan_amnt / dataToSend.annual_inc).toFixed(3));
+      } else {
+          dataToSend.loan_to_income_ratio = 0; // Default or handle as error if required
+      }
+      if (dataToSend.revol_util || dataToSend.revol_util === 0) {
+          dataToSend.credit_utilization_ratio = parseFloat((dataToSend.revol_util / 100).toFixed(3));
+      } else {
+          dataToSend.credit_utilization_ratio = 0; // Default
+      }
+
+
+      try {
+        const res = await fetch("http://127.0.0.1:8000/api/predict", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(dataToSend)
+        });
+
+        const result = await res.json();
+        
+        predictBtn.disabled = false;
+        predictBtn.innerHTML = "Predict Risk";
+
+        if (!res.ok) {
+          // Display server-side validation errors
+          let errorMessage = "Prediction failed.";
+          if (result.detail) {
+              if (Array.isArray(result.detail)) {
+                  errorMessage = result.detail.map(d => `${d.loc.slice(-1)[0]}: ${d.msg}`).join("<br>");
+              } else {
+                  errorMessage = result.detail;
+              }
+          }
+          resultSection.innerHTML = `<div class="p-4 bg-red-50 border-l-4 border-red-400 text-red-700 rounded-lg">
+                                       <h2 class="text-xl font-bold mb-2">❌ Prediction Error</h2>
+                                       <p>${errorMessage}</p>
+                                     </div>`;
+          resultSection.classList.remove("hidden");
+          return;
+        }
+
+        const prob = (result.default_probability * 100).toFixed(2);
+        const decision = result.recommendation.decision; // e.g., "APPROVE"
+        const category = result.recommendation.risk_category; // e.g., "LOW RISK"
+        const reasoning = result.recommendation.reasoning?.map(r => `<li>${r}</li>`).join("") || "<li>No specific reasoning provided.</li>";
+
+        let resultColorClass = '';
+        let resultIcon = '';
+        let borderColorClass = '';
+
+        if (category.includes("HIGH")) {
+          resultColorClass = "bg-red-50 text-red-800";
+          borderColorClass = "border-red-400";
+          resultIcon = '🚨';
+        } else if (category.includes("MODERATE")) {
+          resultColorClass = "bg-orange-50 text-orange-800";
+          borderColorClass = "border-orange-400";
+          resultIcon = '⚠️';
+        } else { // LOW RISK
+          resultColorClass = "bg-green-50 text-green-800";
+          borderColorClass = "border-green-400";
+          resultIcon = '✅';
+        }
+
+        resultSection.innerHTML = `
+          <div class="p-6 border-l-8 ${borderColorClass} rounded-lg ${resultColorClass}">
+            <h2 class="text-2xl font-bold mb-3 flex items-center gap-3">
+              ${resultIcon} Decision: <span class="text-${category.split(' ')[0].toLowerCase()}-700">${decision}</span>
+            </h2>
+            <p class="font-semibold text-lg mb-2">Risk Category: <span class="font-bold">${category}</span></p>
+            <p class="text-base mb-4">Default Probability: <strong class="text-xl">${prob}%</strong></p>
+            
+            <div class="mt-4 pt-4 border-t border-gray-200">
+              <h4 class="text-lg font-semibold text-gray-700 mb-2">Reasoning & Key Factors:</h4>
+              <ul class="list-disc pl-5 text-base text-gray-700 space-y-1">
+                ${reasoning}
+              </ul>
+            </div>
+            
+            <div class="mt-4 text-sm text-gray-600 border-t pt-3">
+                <p>Calculated Loan-to-Income Ratio: <strong>${(dataToSend.loan_to_income_ratio * 100).toFixed(1)}%</strong></p>
+                <p>Calculated Credit Utilization Ratio: <strong>${(dataToSend.credit_utilization_ratio * 100).toFixed(1)}%</strong></p>
+            </div>
+          </div>`;
+        resultSection.classList.remove("hidden");
+      } catch (err) {
+        console.error(err);
+        alert("⚠️ Server connection error. Please ensure the backend is running and accessible.");
+        predictBtn.disabled = false;
+        predictBtn.innerHTML = "Predict Risk";
+      }
+    });
+  });
+  </script>
+</body>
+</html>

@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Batch Prediction - CreditPath AI</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Poppins', sans-serif; }
+    .drag-drop-area {
+      border: 3px dashed #93c5fd; /* blue-300 */
+      background-color: #eff6ff; /* blue-50 */
+      transition: all 0.2s ease-in-out;
+    }
+    .drag-drop-area.hover {
+      border-color: #3b82f6; /* blue-500 */
+      background-color: #dbeafe; /* blue-100 */
+    }
+  </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+  <nav class="bg-blue-700 text-white px-8 py-4 flex justify-between items-center shadow-md">
+    <h1 class="text-xl font-bold">Batch Processing</h1>
+    <div class="space-x-6">
+      <a href="dashboard.html" class="hover:underline hover:text-blue-100 transition-colors">Dashboard</a>
+      <a href="single_prediction.html" class="hover:text-gray-200 transition-colors">Single Prediction</a>
+      <a href="batch_prediction.html" class="font-semibold border-b-2 border-white pb-1">Batch Processing</a>
+    </div>
+  </nav>
+
+  <main class="max-w-4xl mx-auto mt-12 bg-white rounded-2xl shadow-xl p-8 text-center border border-gray-100">
+    <h2 class="text-3xl font-bold text-blue-700 mb-4 flex items-center justify-center gap-3">
+      <span class="text-4xl">📂</span> Batch Risk Assessment
+    </h2>
+    <p class="text-gray-600 mb-8 text-lg">Upload a CSV file containing multiple borrower profiles to get instant, aggregated risk predictions.</p>
+
+    <input type="file" id="fileInput" accept=".csv" class="hidden" />
+    <label for="fileInput" id="dropArea" class="drag-drop-area rounded-lg p-12 w-full block cursor-pointer text-blue-700 font-medium">
+      <p class="text-2xl mb-2">Drag & drop your CSV file here</p>
+      <p class="text-gray-500 text-lg">or <span class="underline">click to browse</span></p>
+      <p id="fileName" class="text-sm text-gray-500 mt-4 italic"></p>
+    </label>
+
+    <button id="uploadBtn" class="mt-8 bg-blue-700 text-white px-8 py-3 rounded-lg font-semibold hover:bg-blue-800 transition-colors shadow-md flex items-center justify-center mx-auto min-w-[200px]">
+      Upload & Predict
+    </button>
+    <div id="loadingIndicator" class="hidden mt-4 text-blue-600 flex items-center justify-center">
+      <svg class="animate-spin -ml-1 mr-3 h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+      </svg>
+      Processing...
+    </div>
+    <div id="errorMessage" class="hidden mt-4 text-red-600"></div>
+
+    <div id="resultTable" class="hidden mt-10 overflow-x-auto bg-gray-50 p-6 rounded-xl shadow-inner border border-gray-200">
+      <h3 class="text-2xl font-semibold text-gray-700 mb-4">📊 Prediction Results</h3>
+      <table class="min-w-full border border-gray-300 text-sm rounded-lg overflow-hidden">
+        <thead class="bg-blue-100 text-blue-700 border-b-2 border-blue-200">
+          <tr>
+            <th class="py-3 px-4 border text-left">Borrower ID</th>
+            <th class="py-3 px-4 border text-left">Default Probability</th>
+            <th class="py-3 px-4 border text-left">Risk Category</th>
+            <th class="py-3 px-4 border text-left">Decision</th>
+            <th class="py-3 px-4 border text-left">Key Reasoning</th>
+          </tr>
+        </thead>
+        <tbody id="tableBody" class="divide-y divide-gray-200">
+          <!-- Results will be injected here -->
+        </tbody>
+      </table>
+    </div>
+  </main>
+
+  <footer class="text-center py-6 text-sm text-gray-500 mt-10 border-t border-gray-200">© 2025 CreditPath AI. All rights reserved.</footer>
+
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const fileInput = document.getElementById("fileInput");
+      const dropArea = document.getElementById("dropArea");
+      const fileNameDisplay = document.getElementById("fileName");
+      const uploadBtn = document.getElementById("uploadBtn");
+      const resultTableDiv = document.getElementById("resultTable");
+      const tableBody = document.getElementById("tableBody");
+      const loadingIndicator = document.getElementById("loadingIndicator");
+      const errorMessageDiv = document.getElementById("errorMessage");
+
+      let selectedFile = null;
+
+      // Drag and drop functionality
+      ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, preventDefaults, false);
+      });
+
+      ['dragenter', 'dragover'].forEach(eventName => {
+        dropArea.addEventListener(eventName, highlight, false);
+      });
+
+      ['dragleave', 'drop'].forEach(eventName => {
+        dropArea.addEventListener(eventName, unhighlight, false);
+      });
+
+      dropArea.addEventListener('drop', handleDrop, false);
+
+      function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      function highlight() {
+        dropArea.classList.add('hover');
+      }
+
+      function unhighlight() {
+        dropArea.classList.remove('hover');
+      }
+
+      function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        if (files.length > 0) {
+          selectedFile = files[0];
+          fileNameDisplay.textContent = selectedFile.name;
+          errorMessageDiv.classList.add('hidden');
+          resultTableDiv.classList.add('hidden');
+        }
+      }
+
+      // File input change
+      fileInput.addEventListener("change", (e) => {
+        selectedFile = e.target.files[0];
+        if (selectedFile) {
+          fileNameDisplay.textContent = selectedFile.name;
+          errorMessageDiv.classList.add('hidden');
+          resultTableDiv.classList.add('hidden');
+        } else {
+          fileNameDisplay.textContent = '';
+        }
+      });
+
+      // Upload button click
+      uploadBtn.addEventListener("click", async () => {
+        if (!selectedFile) {
+          errorMessageDiv.textContent = "Please select a CSV file first.";
+          errorMessageDiv.classList.remove('hidden');
+          return;
+        }
+
+        errorMessageDiv.classList.add('hidden');
+        loadingIndicator.classList.remove('hidden');
+        uploadBtn.disabled = true;
+        uploadBtn.innerHTML = `
+          <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          Processing...
+        `;
+        resultTableDiv.classList.add('hidden');
+        tableBody.innerHTML = '';
+
+        try {
+            // Updated to reflect the actual API call and response structure
+            const simulatedResults = await simulateBatchPrediction(selectedFile);
+            
+            tableBody.innerHTML = simulatedResults.map(r => {
+                let riskCategory = r.recommendation.risk_category;
+                let decision = r.recommendation.decision;
+                let defaultProbability = r.default_probability;
+
+                let riskCategoryColorClass = '';
+                let decisionColorClass = '';
+                let probTextColorClass = '';
+
+                // Color for Risk Category and Probability text
+                if (riskCategory === "LOW RISK") {
+                    riskCategoryColorClass = 'text-green-700 font-medium';
+                    probTextColorClass = 'text-green-600';
+                } else if (riskCategory === "MODERATE RISK") {
+                    riskCategoryColorClass = 'text-orange-600 font-medium';
+                    probTextColorClass = 'text-orange-500';
+                } else if (riskCategory === "HIGH RISK" || riskCategory === "VERY HIGH RISK") {
+                    riskCategoryColorClass = 'text-red-700 font-medium';
+                    probTextColorClass = 'text-red-600';
+                } else {
+                    // For ERROR or other unhandled categories
+                    riskCategoryColorClass = 'text-gray-500';
+                    probTextColorClass = 'text-gray-500';
+                }
+
+                // Color for Decision Badge
+                if (decision.includes("APPROVE LOAN WITH CONDITIONS")) {
+                    decisionColorClass = 'bg-orange-100 text-orange-800';
+                } else if (decision.includes("APPROVE LOAN")) {
+                    decisionColorClass = 'bg-green-100 text-green-800';
+                } else if (decision.includes("DECLINE LOAN")) {
+                    decisionColorClass = 'bg-red-100 text-red-800';
+                } else {
+                    // For ERROR or other unhandled decisions
+                    decisionColorClass = 'bg-gray-100 text-gray-800';
+                }
+
+                return `
+                    <tr class="border-b border-gray-200 hover:bg-gray-50">
+                        <td class="py-2 px-4 border">${r.row_id}</td>
+                        <td class="py-2 px-4 border ${probTextColorClass}">${(defaultProbability * 100).toFixed(2)}%</td>
+                        <td class="py-2 px-4 border ${riskCategoryColorClass}">${riskCategory}</td>
+                        <td class="py-2 px-4 border"><span class="px-3 py-1 rounded-full text-xs font-semibold ${decisionColorClass}">${decision}</span></td>
+                        <td class="py-2 px-4 border text-gray-700">${r.recommendation.reasoning.join('. ')}</td>
+                    </tr>`;
+            }).join("");
+            resultTableDiv.classList.remove("hidden");
+        } catch (error) {
+            errorMessageDiv.textContent = `Error processing file: ${error.message}`;
+            errorMessageDiv.classList.remove('hidden');
+            console.error('Batch prediction error:', error);
+        } finally {
+            loadingIndicator.classList.add('hidden');
+            uploadBtn.disabled = false;
+            uploadBtn.innerHTML = "Upload & Predict";
+        }
+      });
+
+      // Updated simulateBatchPrediction to correctly parse CSV and call your /api/predict endpoint
+      async function simulateBatchPrediction(file) {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = async (e) => {
+            const text = e.target.result;
+            const lines = text.split('\n').filter(line => line.trim() !== '');
+            if (lines.length < 2) {
+              return reject(new Error("CSV file is empty or malformed."));
+            }
+            const headers = lines[0].split(',').map(h => h.trim());
+            const predictions = [];
+
+            for (let i = 1; i < lines.length; i++) {
+              const values = lines[i].split(',').map(v => v.trim());
+              if (values.length !== headers.length) {
+                  console.warn(`Skipping malformed row ${i+1}: ${lines[i]}`);
+                  continue;
+              }
+              const rowData = {};
+              headers.forEach((header, index) => {
+                let value = values[index];
+                // Attempt to convert to number if it looks like one
+                // Use the Pydantic schema for target types for better robustness
+                const numericFields = ['loan_amnt', 'int_rate', 'installment', 'sub_grade', 'annual_inc', 'dti', 'open_acc', 'revol_util', 'total_acc', 'mort_acc', 'loan_to_income_ratio', 'credit_utilization_ratio', 'pub_rec', 'revol_bal', 'pub_rec_bankruptcies'];
+                if (numericFields.includes(header) && !isNaN(parseFloat(value)) && isFinite(value)) {
+                    rowData[header] = parseFloat(value);
+                } else if (header === 'open_acc' || header === 'total_acc' || header === 'mort_acc' || header === 'pub_rec' || header === 'pub_rec_bankruptcies') {
+                    rowData[header] = parseInt(value, 10);
+                }
+                else {
+                    rowData[header] = value;
+                }
+              });
+
+              try {
+                const res = await fetch("http://127.0.0.1:8000/api/predict", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify(rowData)
+                });
+                const result = await res.json(); // FastAPI returns a dict directly, not { prediction: ... }
+                
+                if (res.ok && result.status === "success") {
+                    predictions.push({
+                        row_id: i, // Use the row index as ID
+                        ...result // Spread the entire result object
+                    });
+                } else {
+                    console.error(`Error predicting for row ${i}:`, result.message || 'Unknown error');
+                    predictions.push({
+                        row_id: i,
+                        default_probability: 0,
+                        recommendation: {
+                            risk_category: "ERROR",
+                            decision: "API ERROR",
+                            reasoning: [`Prediction failed: ${result.message || 'Server error'}`]
+                        },
+                        status: "error"
+                    });
+                }
+              } catch (apiError) {
+                  console.error(`API call error for row ${i}:`, apiError);
+                  predictions.push({
+                      row_id: i,
+                      default_probability: 0,
+                      recommendation: {
+                            risk_category: "API ERROR",
+                            decision: "NETWORK ERROR",
+                            reasoning: [`Failed to connect to API: ${apiError.message}`]
+                        },
+                      status: "error"
+                  });
+              }
+            }
+            resolve(predictions);
+          };
+          reader.onerror = () => reject(reader.error);
+          reader.readAsText(file);
+        });
+      }
+    });
+</script>
+</body>
+</html>
