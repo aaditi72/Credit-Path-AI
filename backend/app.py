@@ -82,6 +82,15 @@ def health_check():
     """Basic health check endpoint."""
     return {"status": "ok", "timestamp": datetime.now().isoformat(), "message": "API is healthy"}
 
+
+# Only runs when started directly (for Render/Local testing)
+if __name__ == "__main__":
+    import uvicorn
+    import os
+
+    port = int(os.environ.get("PORT", 8000))
+    uvicorn.run("app:app", host="0.0.0.0", port=port, reload=False)
+
 # Add a simple /api/batch_predict endpoint if you want to implement it in FastAPI later
 # @app.post("/api/batch_predict")
 # async def batch_predict(file: UploadFile = File(...)):

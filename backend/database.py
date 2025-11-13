@@ -11,7 +11,7 @@ MYSQL_PORT = os.getenv("MYSQL_PORT", 3306)
 MYSQL_DB = os.getenv("MYSQL_DB", "creditpath_ai")
 
 # Construct DATABASE_URL using f-strings for clarity and security (if escaping needed)
-DATABASE_URL = "mysql+pymysql://root:NCT127%40dream@127.0.0.1:3306/creditpath_ai"
+DATABASE_URL = os.getenv("DATABASE_URL", "mysql+pymysql://root:pOkpywahgINwwPTDtBgmexKHMMkQuYxl@metro.proxy.rlwy.net:17009/railway")
 
 engine = create_engine(DATABASE_URL)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
