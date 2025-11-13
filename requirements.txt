@@ -1,0 +1,17 @@
+pandas
+numpy
+scikit-learn
+matplotlib
+seaborn
+jupyter
+notebook
+xgboost
+tensorflow
+torch
+scipy
+fastapi
+uvicorn
+sqlalchemy
+pymysql
+python-multipart
+pydantic[email]
