@@ -31,29 +31,23 @@ def preprocess_input(data: dict):
 
     # Convert sub_grade string → numeric
     raw_sub = df.loc[0, "sub_grade"]
-
     if raw_sub not in subgrade_map:
         raise ValueError(f"Invalid sub_grade '{raw_sub}'. Allowed: {list(subgrade_map.keys())}")
 
     df["sub_grade"] = subgrade_map[raw_sub]
 
-    # ===== DERIVED FEATURES (MUST ALWAYS EXIST) =====
+    # ===== DERIVED FEATURES (must exist BEFORE selecting columns) =====
     df["credit_utilization_ratio"] = df["revol_util"].astype(float) / 100.0
     df["loan_to_income_ratio"] = df["loan_amnt"].astype(float) / (df["annual_inc"].astype(float) + 1)
 
-    # ===== ENSURE final_features contains derived columns =====
-    if "credit_utilization_ratio" not in final_features:
-        final_features.append("credit_utilization_ratio")
+    # ===== DO NOT MODIFY final_features, just use them =====
 
-    if "loan_to_income_ratio" not in final_features:
-        final_features.append("loan_to_income_ratio")
-
-    # ===== ADD ANY MISSING REQUIRED COLUMNS =====
+    # Add missing features with 0
     for col in final_features:
         if col not in df.columns:
             df[col] = 0
 
-    # ===== REORDER COLUMNS =====
+    # Select ONLY the exact 63 training features
     df = df[final_features]
 
     # Ensure numeric
