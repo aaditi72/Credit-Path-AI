@@ -20,7 +20,7 @@ app.include_router(auth_router)
 # IMPORTANT: Restrict allow_origins in production!
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://credit-path-frontend.onrender.com","*"], # Add your frontend's actual origin
+    allow_origins=["https://credit-path-ai-17fc.onrender.com"], # Add your frontend's actual origin
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
