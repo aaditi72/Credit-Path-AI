@@ -14,7 +14,7 @@ MODEL_DIR = Path("models")
 # Load the **CORRECT** artifacts created during training
 MODEL_PATH = MODEL_DIR / "xgb_grid_tuned_v1.pkl"
 SCALER_PATH = MODEL_DIR / "scaler_v1.pkl"
-FEATURE_PATH = MODEL_DIR / "final_features_v1.pkl"
+FEATURE_PATH = MODEL_DIR / "final_features_63.pkl"
 SUBGRADE_ENCODER_PATH = MODEL_DIR / "sub_grade_encoder.pkl"
 
 # Load artifacts
