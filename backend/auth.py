@@ -7,7 +7,7 @@ import bcrypt
 from typing import Optional
 from datetime import datetime
 
-router = APIRouter(prefix="/api/auth", tags=["Auth"])
+router = APIRouter(prefix="/api", tags=["Auth"])
 
 # Dependency to get DB session
 def get_db():
