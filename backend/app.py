@@ -53,16 +53,22 @@ def predict(data: BorrowerInput):
         borrower_dict = data.model_dump()
 
         # 🔥 NEW MODEL PIPELINE (updated)
-        prob = predict_default_probability(borrower_dict)
-        recommendation = recommend_action(prob, borrower_dict)
+        result = predict_default_probability(borrower_dict)
+        prob_value = result["probability"]                      # probability for detected default label
+        class_prob_map = result["class_probability_map"]        # mapping label -> prob
+        detected_default_label = result["default_label"]
+
+        recommendation = recommend_action(prob_value, borrower_dict)
 
         response = {
             "timestamp": datetime.utcnow().isoformat(),
-            "default_probability": round(prob, 4),
+            "default_probability": round(prob_value, 4),
+            "class_probability_map": class_prob_map,
+            "detected_default_label": str(detected_default_label),
             "recommendation": recommendation,
-            "model_version": "xgb_grid_tuned_v1",
+            "model_version": "model_lgbm_tuned_v1",  # optional: set correct model name
             "status": "success"
-        }
+            }
 
         # Log request & response
         log_request(borrower_dict, response)

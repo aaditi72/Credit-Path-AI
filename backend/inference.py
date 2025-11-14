@@ -58,12 +58,67 @@ def preprocess_input(data: dict):
 
 
 # -------------------- PREDICT PROBABILITY --------------------
-def predict_default_probability(data: dict) -> float:
+def predict_default_probability(data: dict) -> dict:
+    """
+    Returns a dictionary with:
+      - probability: float -> probability of the 'default' class (as detected)
+      - class_probability_map: dict -> mapping { str(class_label) : probability }
+      - classes: list -> the model.classes_ list
+      - raw_probs: list -> original predict_proba probabilities (in same order as classes)
+      - default_label: the class label chosen as representing 'default'
+    This is robust to models whose positive class is NOT the 'default' label.
+    """
     try:
         df = preprocess_input(data)
         scaled = scaler.transform(df)
-        prob = model.predict_proba(scaled)[0][1]
-        return float(prob)
+        probs = model.predict_proba(scaled)[0]  # e.g. [prob_of_class0, prob_of_class1, ...]
+        classes = list(model.classes_)
+
+        # Heuristic list of labels that commonly mean "default / bad"
+        default_candidates = {
+            "charged off", "charged_off", "charged-off",
+            "default", "defaulted", "late", "late (31-120 days)",
+            "1", "true", "yes", "bad"
+        }
+
+        chosen_index = None
+        for i, c in enumerate(classes):
+            try:
+                label_norm = str(c).strip().lower()
+            except Exception:
+                label_norm = ""
+            if label_norm in default_candidates:
+                chosen_index = i
+                default_label = c
+                break
+
+        # If not found, prefer numeric 1 (common encoding), else fallback to index 1 if exists
+        if chosen_index is None:
+            if 1 in classes:
+                chosen_index = classes.index(1)
+                default_label = 1
+            elif "1" in [str(x) for x in classes]:
+                chosen_index = [str(x) for x in classes].index("1")
+                default_label = classes[chosen_index]
+            else:
+                # Fallback: choose the class with higher average risk indicators?
+                # We'll pick index 1 if binary, else index 0 — but we also return class map so you can inspect.
+                chosen_index = 1 if len(classes) > 1 else 0
+                default_label = classes[chosen_index]
+
+        prob_default = float(probs[chosen_index])
+
+        # Build label->prob mapping (string keys for JSON safety)
+        class_probability_map = { str(classes[i]): float(probs[i]) for i in range(len(classes)) }
+
+        return {
+            "probability": prob_default,
+            "class_probability_map": class_probability_map,
+            "classes": classes,
+            "raw_probs": probs.tolist(),
+            "default_label": default_label,
+            "default_index": chosen_index
+        }
 
     except Exception as e:
         raise RuntimeError(f"Prediction failed: {e}")
