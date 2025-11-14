@@ -9,7 +9,7 @@ import logging
 logging.basicConfig(level=logging.INFO, format="%(asctime)s - %(levelname)s - %(message)s")
 
 # Correct model directory
-MODEL_DIR = Path("backend/models")
+MODEL_DIR = Path("models")
 
 # Load the **CORRECT** artifacts created during training
 MODEL_PATH = MODEL_DIR / "xgb_grid_tuned_v1.pkl"
