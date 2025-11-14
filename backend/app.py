@@ -7,7 +7,7 @@ from logger import log_request
 from schemas import BorrowerInput
 from fastapi.middleware.cors import CORSMiddleware
 from auth import router as auth_router
-from database import Base, engine # Ensure database is imported for potential use if needed
+from database import Base, engine
 
 app = FastAPI(
     title="CreditPath AI - Loan Risk Prediction API",
@@ -15,12 +15,13 @@ app = FastAPI(
     version="1.0.0"
 )
 
+# Auth router
 app.include_router(auth_router)
 
-# IMPORTANT: Restrict allow_origins in production!
+# CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://credit-path-ai-17fc.onrender.com"], # Add your frontend's actual origin
+    allow_origins=["https://credit-path-ai-17fc.onrender.com"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -28,76 +29,70 @@ app.add_middleware(
 
 @app.on_event("startup")
 async def startup_event():
-    """Ensures database tables are created on startup."""
-    print("Attempting to create database tables if they don't exist...")
-    Base.metadata.create_all(bind=engine)
-    print("Database tables check complete.")
+    """Runs on API startup."""
+    try:
+        print("⏳ Creating database tables...")
+        Base.metadata.create_all(bind=engine)
+        print("✅ Database OK!")
+    except Exception as e:
+        print(f"⚠ Database initialization error: {e}")
 
 
 @app.get("/", summary="Health check endpoint")
 def root():
-    """Root endpoint for health check."""
+    """Basic root endpoint."""
     return {"message": "✅ CreditPath AI Backend is running successfully! Visit /docs for API documentation."}
 
 
-@app.post("/api/predict", response_model=dict, summary="Get loan default risk prediction and recommendation")
+@app.post("/api/predict", summary="Predict default risk + recommendation")
 def predict(data: BorrowerInput):
     """
-    Receives borrower data, validates it, predicts default probability using the ML model,
-    generates a risk-based recommendation with reasoning, logs the transaction, and returns the response.
+    Receives borrower data → preprocess → predict probability → generate recommendation → log transaction → return response.
     """
-
     try:
-        borrower_dict = data.dict()
+        borrower_dict = data.model_dump()
 
+        # 🔥 NEW MODEL PIPELINE (updated)
         prob = predict_default_probability(borrower_dict)
-        recommendation = recommend_action(prob, borrower_dict) # Pass borrower_dict for richer reasoning
+        recommendation = recommend_action(prob, borrower_dict)
 
         response = {
-            "timestamp": datetime.now().isoformat(),
+            "timestamp": datetime.utcnow().isoformat(),
             "default_probability": round(prob, 4),
             "recommendation": recommendation,
-            "model_version": "xgb_hypertuned_all_features_v1",
+            "model_version": "xgb_grid_tuned_v1",
             "status": "success"
         }
 
+        # Log request & response
         log_request(borrower_dict, response)
 
         return JSONResponse(content=response, status_code=200)
 
     except HTTPException as e:
-        # Re-raise explicit HTTPExceptions (e.g., from Pydantic validation)
         error_msg = {"status": "error", "message": e.detail}
-        log_request(data.dict(), error_msg)
+        log_request(data.model_dump(), error_msg)
         raise e
+
     except Exception as e:
-        # Handles other runtime or model-related errors gracefully
         error_msg = {"status": "error", "message": f"Internal Server Error: {str(e)}"}
-        log_request(data.dict(), error_msg)
-        raise HTTPException(status_code=500, detail=f"An unexpected error occurred: {str(e)}")
+        log_request(data.model_dump(), error_msg)
+        raise HTTPException(status_code=500, detail=f"Unexpected server error: {str(e)}")
 
 
-@app.get("/api/health", summary="Basic health check endpoint")
+@app.get("/api/health", summary="Health endpoint")
 def health_check():
-    """Basic health check endpoint."""
-    return {"status": "ok", "timestamp": datetime.now().isoformat(), "message": "API is healthy"}
+    return {
+        "status": "ok",
+        "timestamp": datetime.utcnow().isoformat(),
+        "message": "API is healthy"
+    }
 
 
-# Only runs when started directly (for Render/Local testing)
+# Local or Render entry point
 if __name__ == "__main__":
     import uvicorn
     import os
 
     port = int(os.environ.get("PORT", 8000))
     uvicorn.run("app:app", host="0.0.0.0", port=port, reload=False)
-
-# Add a simple /api/batch_predict endpoint if you want to implement it in FastAPI later
-# @app.post("/api/batch_predict")
-# async def batch_predict(file: UploadFile = File(...)):
-#     """
-#     Accepts a CSV file, processes each row for prediction, and returns aggregated results.
-#     """
-#     # Implement CSV parsing and calling predict_default_probability for each row
-#     # This would be a more complex endpoint.
-#     # For now, frontend simulates it by calling single_predict repeatedly.
-#     return {"message": "Batch prediction not yet implemented on backend, frontend simulates."}
