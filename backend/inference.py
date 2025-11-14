@@ -31,6 +31,7 @@ except Exception as e:
 
 # ---------------- PREPROCESSING ----------------
 def preprocess_input(data: dict):
+    print("🔥 USING UPDATED inference.py WITH DERIVED FEATURES ✔")
     df = pd.DataFrame([data])
 
     # Convert sub_grade string → numeric
