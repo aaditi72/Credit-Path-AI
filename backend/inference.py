@@ -40,13 +40,12 @@ except Exception as e:
 def preprocess_input(data: dict):
     df = pd.DataFrame([data])
 
-    # ---- Validate & Map Sub-grade ----
+    # ---- Map Sub-grade ----
     raw_subgrade = str(df.loc[0, "sub_grade"]).strip().upper()
 
     if raw_subgrade not in subgrade_map:
         raise ValueError(
-            f"Invalid sub_grade '{raw_subgrade}'. "
-            f"Allowed values: {list(subgrade_map.keys())}"
+            f"Invalid sub_grade '{raw_subgrade}'. Allowed: {list(subgrade_map.keys())}"
         )
 
     df["sub_grade"] = subgrade_map[raw_subgrade]
@@ -64,10 +63,10 @@ def preprocess_input(data: dict):
         if col not in df.columns:
             df[col] = 0
 
-    # ---- Reorder columns to match training ----
+    # ---- Reorder columns EXACTLY like training ----
     df = df[final_features]
 
-    # ---- Ensure all numeric ----
+    # ---- Ensure numeric ----
     df = df.apply(pd.to_numeric, errors="coerce").fillna(0)
 
     return df
