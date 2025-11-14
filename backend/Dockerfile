@@ -3,7 +3,8 @@ FROM python:3.11-slim
 WORKDIR /app
 
 # Copy everything in backend folder INTO the container
-COPY . .
+COPY . /app/
+
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
