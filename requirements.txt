@@ -4,10 +4,9 @@ numpy==1.26.4
 scikit-learn==1.4.2
 scipy==1.13.1
 
-# Machine Learning
+# Machine Learning (CPU versions)
 xgboost==2.0.3
-tensorflow
-torch
+joblib==1.4.2
 
 # Backend API
 fastapi==0.115.2
@@ -16,21 +15,21 @@ uvicorn==0.30.6
 # Database and ORM
 sqlalchemy==2.0.30
 pymysql==1.1.1
-cryptography
+cryptography==42.0.8
 
 # Pydantic (with email validation)
 pydantic[email]==2.9.2
 
-# File Handling & Utilities
+# File Handling
 python-multipart==0.0.9
-joblib==1.4.2
 
-# Visualization (Optional)
+# Visualization (Optional for local only, still CPU-safe)
 matplotlib==3.9.2
 seaborn==0.13.2
 
-# Dev Tools
+# Dev Tools (These are safe, but optional)
 jupyter
 notebook
 
+# Password hashing
 bcrypt==4.2.0
